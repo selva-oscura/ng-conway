@@ -1,18 +1,31 @@
-import { Component, OnInit} from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit {
   seedDensity = .25;
-  numRows = 20;
-  numCols = 40;
+  height: BehaviorSubject<number> = new BehaviorSubject(0);
+  width: BehaviorSubject<number> = new BehaviorSubject(0);
+  cellSize = 10;
+  cellMargin = 1;
+  numRows = 0;
+  numCols = 0;
   grid: Array<Array<number>> = [];
 
-  ngOnInit() {
+  ngAfterViewInit() {
+    this.updateDimensions();
     this.generateGrid();
+  }
+
+  private updateDimensions() {
+    this.height.next(window.innerHeight);
+    this.width.next(window.innerWidth);
+    this.numRows = calculateRowOrColumnCount(this.height.value, this.cellMargin, this.cellSize);
+    this.numCols = calculateRowOrColumnCount(this.width.value, this.cellMargin, this.cellSize);
   }
 
   private generateGrid() {
@@ -28,3 +41,7 @@ export class AppComponent implements OnInit {
     this.grid = grid;
   }
 }
+
+const calculateRowOrColumnCount = (dimensionSize: number, cellMargin: number, cellSize: number): number => {
+  return Math.floor((dimensionSize - 2 * cellMargin) / (cellSize + 2 * cellMargin))
+};

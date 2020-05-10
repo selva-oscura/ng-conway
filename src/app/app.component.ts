@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, HostListener } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -15,6 +15,11 @@ export class AppComponent implements AfterViewInit {
   numRows = 0;
   numCols = 0;
   grid: Array<Array<number>> = [];
+
+  @HostListener('window:resize', [])
+  private onResize() {
+    this.updateDimensions();
+  }
 
   ngAfterViewInit() {
     this.updateDimensions();

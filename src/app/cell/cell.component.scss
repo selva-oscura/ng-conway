@@ -1,0 +1,9 @@
+div {
+  height: 10px;
+  margin: 2px;
+  width: 10px;
+
+  &.alive {
+    background-color: red;
+  }
+}

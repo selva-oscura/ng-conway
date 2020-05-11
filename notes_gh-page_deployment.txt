@@ -1,0 +1,4 @@
+To update build for github-pages deployment
+  ng build --prod --base-href="https://selva-oscura.github.io/ng-conway/"
+To deploy build to github-pages
+  npx angular-cli-ghpages --dir=dist/ng-conway

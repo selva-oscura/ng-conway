@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1589184005766,
+  "timestamp": 1589185423188,
   "index": "https://selva-oscura.github.io/ng-conway/index.html",
   "assetGroups": [
     {
@@ -52,7 +52,7 @@
     "https://selva-oscura.github.io/ng-conway/index.html": "af578141475456f6a95ca392948dcd24103b8c0f",
     "https://selva-oscura.github.io/ng-conway/main-es2015.e2f4e90cf4c4f3665703.js": "80e000de268539a886f6896ed909511755f53ad8",
     "https://selva-oscura.github.io/ng-conway/main-es5.e2f4e90cf4c4f3665703.js": "057858f449dca4478d886af7cd76c42159c1a771",
-    "https://selva-oscura.github.io/ng-conway/manifest.webmanifest": "bd7128fa47d52555bbd72c8791771afe913dc615",
+    "https://selva-oscura.github.io/ng-conway/manifest.webmanifest": "ab2d3855971919390347a9055595382aad2b6594",
     "https://selva-oscura.github.io/ng-conway/polyfills-es2015.690002c25ea8557bb4b0.js": "72ad4ccc0a3916ae4598199447cdeadd6d380570",
     "https://selva-oscura.github.io/ng-conway/polyfills-es5.9e286f6d9247438cbb02.js": "89222a28dbabb780fc372d33834080e0cd3083d9",
     "https://selva-oscura.github.io/ng-conway/runtime-es2015.1eba213af0b233498d9d.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",

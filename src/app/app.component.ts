@@ -7,27 +7,33 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  seedDensity = .25;
+  seedDensity = .08;
+  refreshPeriodInMS = 1500;
   height: BehaviorSubject<number> = new BehaviorSubject(0);
   width: BehaviorSubject<number> = new BehaviorSubject(0);
-  cellSize = 10;
-  cellMargin = 1;
+  cellSize = 8;
+  cellMargin = 0;
   numRows = 0;
   numCols = 0;
   grid: BehaviorSubject<Array<Array<number>>> = new BehaviorSubject([]);
+  shouldResizeGrid = false;
 
   @HostListener('window:resize', [])
   private onResize() {
-    const [oldNumRows, oldNumCols] = [this.numRows, this.numCols];
-    this.updateDimensions();
-    const updatedGrid = resizeGrid(this.grid.value, oldNumRows, this.numRows, oldNumCols, this.numCols);
-    this.grid.next(updatedGrid);
+    this.shouldResizeGrid = true;
   }
 
   ngOnInit() {
     this.updateDimensions();
     const initialGrid = instantiateGrid(this.numRows, this.numCols, this.seedDensity);
     this.grid.next(initialGrid);
+
+    setInterval(() => {
+      const grid = this.shouldResizeGrid ? this.resizeGrid() : this.grid.value;
+      this.shouldResizeGrid = false;
+      this.grid.next(getNextGenerationGrid(grid));
+      console.log('tick');
+    }, this.refreshPeriodInMS);
   }
 
   private updateDimensions() {
@@ -36,7 +42,15 @@ export class AppComponent implements OnInit {
     this.numRows = calculateRowOrColumnCount(this.height.value, this.cellMargin, this.cellSize);
     this.numCols = calculateRowOrColumnCount(this.width.value, this.cellMargin, this.cellSize);
   }
+
+  private resizeGrid(): number[][] {
+    const [oldNumRows, oldNumCols] = [this.numRows, this.numCols];
+    this.updateDimensions();
+    return resizeGrid(copyGrid(this.grid.value), oldNumRows, this.numRows, oldNumCols, this.numCols);
+  }
 }
+
+const copyGrid = (grid: number[][]): number[][] => grid.map((row: number[]) => [...row]);
 
 const instantiateGrid = (numRows: number, numCols: number, seedDensity): number[][] => {
   const grid: number[][] = [];
@@ -49,6 +63,36 @@ const instantiateGrid = (numRows: number, numCols: number, seedDensity): number[
     grid.push(rowArray);
   }
   return grid;
+};
+
+const getNextGenerationGrid = (grid: number[][]): number[][] => {
+  const rowCount = grid.length;
+  const colCount = grid[0].length;
+  const nextGrid: number[][] = [];
+  for (let row = 0; row < rowCount; row++) {
+    const rowArray: number[] = [];
+    for (let col = 0; col < colCount; col++) {
+      const numberOfLiveNeighbors = countNeighbors(grid, row, col, rowCount, colCount);
+      const isLive = [numberOfLiveNeighbors, numberOfLiveNeighbors + grid[row][col]].includes(3) ? 1 : 0;
+      rowArray.push(isLive);
+    }
+    nextGrid.push(rowArray);
+  }
+  console.log('tock');
+  return nextGrid;
+};
+
+const postitionsToCheck = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+
+const countNeighbors = (grid, row, col, rowCount, colCount): number => {
+  let count = 0;
+  for (const position of postitionsToCheck) {
+    const [rowOffset, colOffset] = position;
+    const periodicBoundaryRow = (rowCount + row + rowOffset) % rowCount;
+    const periodicBoundaryCol = (colCount + col + colOffset) % colCount;
+    count += grid[periodicBoundaryRow][periodicBoundaryCol];
+  }
+  return count;
 };
 
 const resizeGrid = (oldGrid: number[][], oldNumRows: number, newNumRows: number, oldNumCols: number, newNumCols: number): number[][] => {

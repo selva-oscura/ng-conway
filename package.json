@@ -20,7 +20,9 @@
     "@angular/platform-browser-dynamic": "~9.1.6",
     "@angular/router": "~9.1.6",
     "@angular/service-worker": "~9.1.6",
+    "angular-cli-ghpages": "^0.6.2",
     "rxjs": "~6.5.4",
+    "save-dev": "0.0.1-security",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },

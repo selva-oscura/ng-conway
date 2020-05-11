@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
   refreshPeriodInMS = 1500;
   height: BehaviorSubject<number> = new BehaviorSubject(0);
   width: BehaviorSubject<number> = new BehaviorSubject(0);
-  cellSize = 8;
+  cellSize = 6;
   cellMargin = 0;
   numRows = 0;
   numCols = 0;
@@ -32,7 +32,6 @@ export class AppComponent implements OnInit {
       const grid = this.shouldResizeGrid ? this.resizeGrid() : this.grid.value;
       this.shouldResizeGrid = false;
       this.grid.next(getNextGenerationGrid(grid));
-      console.log('tick');
     }, this.refreshPeriodInMS);
   }
 
@@ -78,7 +77,6 @@ const getNextGenerationGrid = (grid: number[][]): number[][] => {
     }
     nextGrid.push(rowArray);
   }
-  console.log('tock');
   return nextGrid;
 };
 
